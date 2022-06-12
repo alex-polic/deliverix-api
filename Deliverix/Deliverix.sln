@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deliverix.DAL", "Deliverix.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deliverix.BLL", "Deliverix.BLL\Deliverix.BLL.csproj", "{8BE57657-9092-4F27-986B-73994B798464}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deliverix.Common", "Deliverix.Common\Deliverix.Common.csproj", "{C6089DB1-2977-4E74-A740-C9543FB2381E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{8BE57657-9092-4F27-986B-73994B798464}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BE57657-9092-4F27-986B-73994B798464}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BE57657-9092-4F27-986B-73994B798464}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6089DB1-2977-4E74-A740-C9543FB2381E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6089DB1-2977-4E74-A740-C9543FB2381E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6089DB1-2977-4E74-A740-C9543FB2381E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6089DB1-2977-4E74-A740-C9543FB2381E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
