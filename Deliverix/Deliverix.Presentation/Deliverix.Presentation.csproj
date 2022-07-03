@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Deliverix.BLL\Deliverix.BLL.csproj" />
       <ProjectReference Include="..\Deliverix.DAL\Deliverix.DAL.csproj" />
     </ItemGroup>
 
