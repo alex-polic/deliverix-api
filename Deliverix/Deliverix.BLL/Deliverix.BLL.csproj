@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Deliverix.Common\Deliverix.Common.csproj" />
+      <ProjectReference Include="..\Deliverix.DAL\Deliverix.DAL.csproj" />
+    </ItemGroup>
+
 </Project>
