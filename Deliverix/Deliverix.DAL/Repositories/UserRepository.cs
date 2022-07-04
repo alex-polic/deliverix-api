@@ -8,7 +8,7 @@ public class UserRepository : IUserRepository
 {
     
     private DbContext _context;
-    private DbSet<User> _collection;
+    private DbSet<User?> _collection;
     
     public UserRepository(UnitOfWork _unit = null)
     {
@@ -19,17 +19,17 @@ public class UserRepository : IUserRepository
         _collection = _context.Set<User>();
     }
 
-    public async Task<User> GetById(int id)
+    public async Task<User?> GetById(int id)
     {
-        return await _collection.AsNoTracking().FirstAsync(e => e.Id == id);
+        return await _collection.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task<IEnumerable<User>> GetAll()
+    public async Task<IEnumerable<User?>> GetAll()
     {
         return await _collection.AsNoTracking().ToListAsync();
     }
 
-    public async Task<User> Create(User user)
+    public async Task<User?> Create(User? user)
     {
         user.CreatedAt = DateTime.UtcNow;
         user.UpdatedAt = DateTime.UtcNow;
@@ -48,9 +48,9 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<User> Delete(int id)
+    public async Task<User?> Delete(int id)
     {
-        User found = await _collection.FirstAsync(e => e.Id == id);
+        User? found = await _collection.FirstAsync(e => e.Id == id);
 
         _collection.Remove(found);
 

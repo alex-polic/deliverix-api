@@ -1,5 +1,7 @@
 using Deliverix.BLL.Contracts;
 using Deliverix.BLL.DTOs;
+using Deliverix.BLL.Mappers;
+using Deliverix.Common.Exceptions;
 using Deliverix.DAL;
 using Deliverix.DAL.Contracts;
 using Deliverix.DAL.Repositories;
@@ -8,7 +10,7 @@ namespace Deliverix.BLL.Services;
 
 public class UserService : IUserService
 {
-    private IUserRepository _userRepository;
+    private readonly IUserRepository _userRepository;
     private UnitOfWork _context;
 
     public UserService()
@@ -19,7 +21,12 @@ public class UserService : IUserService
     
     public async Task<UserDTO> GetById(int id)
     {
-        throw new NotImplementedException();
+        var user = await _userRepository.GetById(id);
+        
+        if (user == null)
+            throw new BusinessException("User with given ID not found", 400);
+        
+        return ObjectMapper.Mapper.Map<UserDTO>(user);
     }
 
     public async Task<IEnumerable<UserDTO>> GetAll()

@@ -1,4 +1,6 @@
+using Deliverix.Common.Configurations;
 using Deliverix.DAL.Models.Contexts;
+using DispensaryGreen.Presentation.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DeliverixContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Entities")));
 
+AppConfiguration.Initialize(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +30,8 @@ app.UseHttpsRedirection();
 
 
 app.UseAuthorization();
+
+app.UseMiddleware<HttpExceptionMiddleware>();
 
 app.MapControllers();
 
