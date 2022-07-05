@@ -1,4 +1,5 @@
 using Deliverix.BLL.Contracts;
+using Deliverix.BLL.DTOs;
 using Deliverix.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,5 +21,21 @@ public class UserController : Controller
         var user = await _service.GetById(id);
 
         return Json(user);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var user = await _service.GetAll();
+
+        return Json(user);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] UserDTO user)
+    {
+        var userResult = await _service.Create(user);
+
+        return Json(userResult);
     }
 }

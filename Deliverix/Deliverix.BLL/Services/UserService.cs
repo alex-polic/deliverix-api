@@ -4,6 +4,7 @@ using Deliverix.BLL.Mappers;
 using Deliverix.Common.Exceptions;
 using Deliverix.DAL;
 using Deliverix.DAL.Contracts;
+using Deliverix.DAL.Models;
 using Deliverix.DAL.Repositories;
 
 namespace Deliverix.BLL.Services;
@@ -31,21 +32,49 @@ public class UserService : IUserService
 
     public async Task<IEnumerable<UserDTO>> GetAll()
     {
-        throw new NotImplementedException();
+        var users = await _userRepository.GetAll();
+
+        return ObjectMapper.Mapper.Map<IEnumerable<UserDTO>>(users);
     }
 
     public async Task<UserDTO> Create(UserDTO user)
     {
-        throw new NotImplementedException();
+        User model = ObjectMapper.Mapper.Map<User>(user);
+        
+        User result = await _userRepository.Create(model);
+
+        await _context.SaveChangesAsync();
+        
+        return ObjectMapper.Mapper.Map<UserDTO>(result);
     }
 
     public async Task<UserDTO> Update(UserDTO user)
     {
-        throw new NotImplementedException();
+        UserDTO userFound = await GetById(user.Id);
+        
+        if (userFound == null)
+            throw new BusinessException("User with given ID does not exist", 400);
+
+        userFound.Username = user.Username;
+        userFound.Email = user.Email;
+        userFound.FullName = user.FullName;
+        userFound.DateOfBirth = user.DateOfBirth;
+        userFound.Address = user.Address;
+        userFound.VerificationStatus = user.VerificationStatus;
+        
+        User model = ObjectMapper.Mapper.Map<User>(userFound);
+        
+        User result = await _userRepository.Update(model);
+
+        await _context.SaveChangesAsync();
+        
+        return ObjectMapper.Mapper.Map<UserDTO>(result);
     }
 
     public async Task<UserDTO> Delete(int id)
     {
-        throw new NotImplementedException();
+        User? user = await _userRepository.Delete(id);
+
+        return ObjectMapper.Mapper.Map<UserDTO>(user);
     }
 }

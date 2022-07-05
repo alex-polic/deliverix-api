@@ -1,5 +1,7 @@
 using Deliverix.DAL.Contracts;
 using Deliverix.DAL.Models;
+using Deliverix.DAL.Validators;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace Deliverix.DAL.Repositories;
@@ -8,7 +10,8 @@ public class UserRepository : IUserRepository
 {
     
     private DbContext _context;
-    private DbSet<User?> _collection;
+    private DbSet<User> _collection;
+    private UserValidator _validator;
     
     public UserRepository(UnitOfWork _unit = null)
     {
@@ -17,6 +20,7 @@ public class UserRepository : IUserRepository
 
         _context = _unit.Context;
         _collection = _context.Set<User>();
+        _validator = new UserValidator();
     }
 
     public async Task<User?> GetById(int id)
@@ -29,14 +33,17 @@ public class UserRepository : IUserRepository
         return await _collection.AsNoTracking().ToListAsync();
     }
 
-    public async Task<User?> Create(User? user)
+    public async Task<User> Create(User user)
     {
+        await _validator.ValidateAndThrowAsync(user);
+
         user.CreatedAt = DateTime.UtcNow;
         user.UpdatedAt = DateTime.UtcNow;
-
-        await _collection.AddAsync(user);
-
+        
+        _collection.Add(user);
+        
         return user;
+        
     }
 
     public async Task<User> Update(User user)
@@ -48,9 +55,9 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<User?> Delete(int id)
+    public async Task<User> Delete(int id)
     {
-        User? found = await _collection.FirstAsync(e => e.Id == id);
+        User found = await _collection.FirstAsync(e => e.Id == id);
 
         _collection.Remove(found);
 

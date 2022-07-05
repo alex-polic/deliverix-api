@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using Deliverix.Common.Exceptions;
+using FluentValidation;
 
 namespace DispensaryGreen.Presentation.Middlewares;
 
@@ -56,6 +57,15 @@ public class HttpExceptionMiddleware
             statusCode = businessException.StatusCode;
             errorCode = businessException.ErrorCode;
             message = businessException.Message;
+        }
+        
+        if (exception is ValidationException)
+        {
+            ValidationException validationException = exception as ValidationException;
+
+            statusCode = 400;
+            errorCode = 1;
+            message = validationException.Message;
         }
     }
 }
