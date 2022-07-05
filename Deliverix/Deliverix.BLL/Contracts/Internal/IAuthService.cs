@@ -4,6 +4,6 @@ namespace Deliverix.BLL.Contracts.Internal;
 
 public interface IAuthService
 {
-    public Task Login(string email, string password);
-    public Task Register(UserRegisterDTO userData);
+    public Task<string> Login(string email, string password);
+    public Task<string> Register(UserRegisterDTO userData);
 }

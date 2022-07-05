@@ -1,5 +1,6 @@
 using Deliverix.BLL.Contracts.Internal;
 using Deliverix.BLL.DTOs.Internal;
+using Deliverix.BLL.DTOs.Requests;
 using Deliverix.BLL.Services.Internal;
 using Deliverix.Common.Enums;
 using Deliverix.Common.Helpers;
@@ -18,9 +19,10 @@ public class AuthController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> Login()
+    public async Task<IActionResult> Login([FromBody] LoginDTO request)
     {
-        return Json(new { Message = "Success" });
+        var token = await _authService.Login(request.Email, request.Password);
+        return Json(token);
     }
     
     [HttpPost]
@@ -38,7 +40,7 @@ public class AuthController : Controller
     {
         string profilePictureUrl = UploadHelper.UploadImage(profilePicture);
         
-        await _authService.Register(new UserRegisterDTO()
+        string token = await _authService.Register(new UserRegisterDTO()
         {
             Username = username,
             Email = email,
@@ -51,6 +53,6 @@ public class AuthController : Controller
             ProfilePictureUrl = profilePictureUrl
         });
         
-        return Json(new { Message = "Success" });
+        return Json(new { Message = "Success", Token = token });
     }
 }

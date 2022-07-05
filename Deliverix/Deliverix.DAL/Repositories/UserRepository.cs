@@ -23,6 +23,11 @@ public class UserRepository : IUserRepository
         _validator = new UserValidator();
     }
 
+    public async Task<User?> GetByEmail(string email)
+    {
+        return await _collection.AsNoTracking().FirstOrDefaultAsync(e => e.Email == email);
+    }
+
     public async Task<User?> GetById(int id)
     {
         return await _collection.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);

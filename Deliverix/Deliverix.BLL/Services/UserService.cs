@@ -19,7 +19,17 @@ public class UserService : IUserService
         _context = new UnitOfWork();
         _userRepository = new UserRepository(_context);
     }
-    
+
+    public async Task<UserDTO> GetByEmail(string email)
+    {
+        var user = await _userRepository.GetByEmail(email);
+        
+        if (user == null)
+            throw new BusinessException("User with given ID not found", 400);
+        
+        return ObjectMapper.Mapper.Map<UserDTO>(user);
+    }
+
     public async Task<UserDTO> GetById(int id)
     {
         var user = await _userRepository.GetById(id);
