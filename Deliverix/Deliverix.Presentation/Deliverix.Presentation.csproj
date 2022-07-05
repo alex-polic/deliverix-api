@@ -21,4 +21,8 @@
       <ProjectReference Include="..\Deliverix.DAL\Deliverix.DAL.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Uploads" />
+    </ItemGroup>
+
 </Project>
