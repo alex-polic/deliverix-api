@@ -1,4 +1,8 @@
+using Deliverix.BLL.Contracts.Internal;
 using Deliverix.BLL.DTOs.Internal;
+using Deliverix.BLL.Services.Internal;
+using Deliverix.Common.Enums;
+using Deliverix.Common.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Deliverix.Presentation.Controllers;
@@ -6,6 +10,13 @@ namespace Deliverix.Presentation.Controllers;
 [Route("[controller]/[action]")]
 public class AuthController : Controller
 {
+    private readonly IAuthService _authService;
+
+    public AuthController()
+    {
+        _authService = new AuthService();
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Login()
     {
@@ -13,8 +24,33 @@ public class AuthController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> Register([FromBody] UserRegisterDTO user)
+    public async Task<IActionResult> Register(
+        string username,
+        string email,
+        string password,
+        string passwordConfirmation,
+        string fullName,
+        DateTime dateOfBirth,
+        string address,
+        int userType,
+        IFormFile profilePicture
+    )
     {
+        string profilePictureUrl = UploadHelper.UploadImage(profilePicture);
+        
+        await _authService.Register(new UserRegisterDTO()
+        {
+            Username = username,
+            Email = email,
+            Password = password,
+            PasswordConfirmation = passwordConfirmation,
+            FullName = fullName,
+            DateOfBirth = dateOfBirth,
+            Address = address,
+            UserType = (UserType) userType,
+            ProfilePictureUrl = profilePictureUrl
+        });
+        
         return Json(new { Message = "Success" });
     }
 }

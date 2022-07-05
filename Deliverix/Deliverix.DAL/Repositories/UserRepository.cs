@@ -40,7 +40,7 @@ public class UserRepository : IUserRepository
         user.CreatedAt = DateTime.UtcNow;
         user.UpdatedAt = DateTime.UtcNow;
         
-        _collection.Add(user);
+        await _collection.AddAsync(user);
         
         return user;
         

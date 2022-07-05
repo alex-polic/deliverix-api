@@ -1,8 +1,8 @@
 using Deliverix.Common.Enums;
 
-namespace Deliverix.BLL.DTOs.Internal;
+namespace Deliverix.BLL.DTOs.Requests;
 
-public class UserRegisterDTO
+public class RegisterDTO
 {
     public string Username { get; set; }
     public string Email { get; set; }

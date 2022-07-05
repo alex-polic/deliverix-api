@@ -16,8 +16,8 @@ public class UserService : IUserService
 
     public UserService()
     {
-        _userRepository = new UserRepository();
         _context = new UnitOfWork();
+        _userRepository = new UserRepository(_context);
     }
     
     public async Task<UserDTO> GetById(int id)
