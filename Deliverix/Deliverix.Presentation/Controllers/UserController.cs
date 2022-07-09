@@ -1,6 +1,7 @@
 using Deliverix.BLL.Contracts;
 using Deliverix.BLL.DTOs;
 using Deliverix.BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Deliverix.Presentation.Controllers;
@@ -16,6 +17,7 @@ public class UserController : Controller
     }
     
     [HttpGet]
+    [Authorize(Policy = "Any")]
     public async Task<IActionResult> GetById(int id)
     {
         var user = await _service.GetById(id);
@@ -24,6 +26,7 @@ public class UserController : Controller
     }
     
     [HttpGet]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> GetAll()
     {
         var user = await _service.GetAll();
@@ -31,11 +34,12 @@ public class UserController : Controller
         return Json(user);
     }
     
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] UserDTO user)
+    [HttpPatch]
+    [Authorize(Policy = "Any")]
+    public async Task<IActionResult> Update([FromBody] UserDTO user)
     {
-        var userResult = await _service.Create(user);
+        var userUpdated = await _service.Update(user);
 
-        return Json(userResult);
+        return Json(userUpdated);
     }
 }

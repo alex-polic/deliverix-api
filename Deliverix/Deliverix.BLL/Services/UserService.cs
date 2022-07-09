@@ -70,7 +70,9 @@ public class UserService : IUserService
         userFound.FullName = user.FullName;
         userFound.DateOfBirth = user.DateOfBirth;
         userFound.Address = user.Address;
-        userFound.VerificationStatus = user.VerificationStatus;
+        userFound.VerificationStatus = user.VerificationStatus != null ?
+                user.VerificationStatus :
+                userFound.VerificationStatus;
         
         User model = ObjectMapper.Mapper.Map<User>(userFound);
         
