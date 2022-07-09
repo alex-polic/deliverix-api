@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Deliverix.Presentation.Controllers;
 
-[Route("[controller]")]
+[Route("")]
 public class HomeController : Controller
 {
 

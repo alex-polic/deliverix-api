@@ -17,6 +17,16 @@ builder.Services.AddDbContext<DeliverixContext>(options =>
 
 AppConfiguration.Initialize(builder.Configuration);
 
+//ConfigureServices
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "CorsPolicy",
+        builder => builder.WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()        
+    );
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,8 +36,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
