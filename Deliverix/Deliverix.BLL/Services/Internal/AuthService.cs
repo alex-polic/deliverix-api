@@ -6,6 +6,7 @@ using Deliverix.BLL.Contracts.Internal;
 using Deliverix.BLL.DTOs;
 using Deliverix.BLL.DTOs.Internal;
 using Deliverix.Common.Configurations;
+using Deliverix.Common.Enums;
 using Deliverix.Common.Exceptions;
 using Deliverix.Common.Helpers;
 using Microsoft.IdentityModel.Tokens;
@@ -54,6 +55,9 @@ public class AuthService : IAuthService
             DateOfBirth = userData.DateOfBirth,
             Address = userData.Address,
             UserType = userData.UserType,
+            VerificationStatus = userData.UserType == UserType.Buyer ? 
+                VerificationStatus.Approved : 
+                VerificationStatus.Pending,
             ProfilePictureUrl = userData.ProfilePictureUrl
         };
 

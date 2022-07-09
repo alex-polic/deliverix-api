@@ -1,9 +1,11 @@
+using System.Security.Claims;
 using Deliverix.BLL.Contracts.Internal;
 using Deliverix.BLL.DTOs.Internal;
 using Deliverix.BLL.DTOs.Requests;
 using Deliverix.BLL.Services.Internal;
 using Deliverix.Common.Enums;
 using Deliverix.Common.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Deliverix.Presentation.Controllers;
@@ -54,5 +56,16 @@ public class AuthController : Controller
         });
         
         return Json(new { Message = "Success", Token = token });
+    }
+
+    [HttpGet]
+    [Authorize(Policy = "Any")]
+    public IActionResult GetUserData()
+    {
+        var id = HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Actor).Value;
+        var email = HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Email).Value;
+        var role = HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Role).Value;
+
+        return Json(new { id, email, role });
     }
 }
