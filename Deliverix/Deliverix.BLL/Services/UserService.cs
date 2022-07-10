@@ -2,6 +2,7 @@ using Deliverix.BLL.Contracts;
 using Deliverix.BLL.DTOs;
 using Deliverix.BLL.Mappers;
 using Deliverix.Common.Exceptions;
+using Deliverix.Common.Helpers;
 using Deliverix.DAL;
 using Deliverix.DAL.Contracts;
 using Deliverix.DAL.Models;
@@ -73,6 +74,9 @@ public class UserService : IUserService
         userFound.VerificationStatus = user.VerificationStatus != null ?
                 user.VerificationStatus :
                 userFound.VerificationStatus;
+
+        if (string.IsNullOrEmpty(user.Password) == false)
+            userFound.Password = HashHelper.Hash(user.Password);
         
         User model = ObjectMapper.Mapper.Map<User>(userFound);
         
