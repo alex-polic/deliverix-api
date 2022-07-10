@@ -1,5 +1,6 @@
 using Deliverix.BLL.Contracts;
 using Deliverix.BLL.DTOs;
+using Deliverix.BLL.DTOs.Requests;
 using Deliverix.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,12 +27,21 @@ public class UserController : Controller
     }
     
     [HttpGet]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "Administrator")]
     public async Task<IActionResult> GetAll()
     {
-        var user = await _service.GetAll();
+        var users = await _service.GetAll();
 
-        return Json(user);
+        return Json(users);
+    }
+    
+    [HttpGet]
+    [Authorize(Policy = "Administrator")]
+    public async Task<IActionResult> GetAllCouriers()
+    {
+        var users = await _service.GetAllCouriers();
+
+        return Json(users);
     }
     
     [HttpPatch]
@@ -39,6 +49,24 @@ public class UserController : Controller
     public async Task<IActionResult> Update([FromBody] UserDTO user)
     {
         var userUpdated = await _service.Update(user);
+
+        return Json(userUpdated);
+    }
+    
+    [HttpPost]
+    [Authorize(Policy = "Administrator")]
+    public async Task<IActionResult> ApproveVerification([FromBody] VerificationDTO request)
+    {
+        var userUpdated = await _service.ApproveVerification(request.CourierId);
+
+        return Json(userUpdated);
+    }
+    
+    [HttpPost]
+    [Authorize(Policy = "Administrator")]
+    public async Task<IActionResult> RejectVerification([FromBody] VerificationDTO request)
+    {
+        var userUpdated = await _service.RejectVerification(request.CourierId);
 
         return Json(userUpdated);
     }

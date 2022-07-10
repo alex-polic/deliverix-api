@@ -1,6 +1,7 @@
 using Deliverix.BLL.Contracts;
 using Deliverix.BLL.DTOs;
 using Deliverix.BLL.Mappers;
+using Deliverix.Common.Enums;
 using Deliverix.Common.Exceptions;
 using Deliverix.Common.Helpers;
 using Deliverix.DAL;
@@ -48,6 +49,15 @@ public class UserService : IUserService
         return ObjectMapper.Mapper.Map<IEnumerable<UserDTO>>(users);
     }
 
+    public async Task<IEnumerable<UserDTO>> GetAllCouriers()
+    {
+        var users = await _userRepository.GetAll();
+        
+        users = users.Where(e => e.UserType == UserType.Courier);
+        
+        return ObjectMapper.Mapper.Map<IEnumerable<UserDTO>>(users);
+    }
+
     public async Task<UserDTO> Create(UserDTO user)
     {
         User model = ObjectMapper.Mapper.Map<User>(user);
@@ -75,7 +85,7 @@ public class UserService : IUserService
                 user.VerificationStatus :
                 userFound.VerificationStatus;
 
-        if (string.IsNullOrEmpty(user.Password) == false)
+        if (string.IsNullOrEmpty(user.Password) == false && userFound.Password != user.Password)
             userFound.Password = HashHelper.Hash(user.Password);
         
         User model = ObjectMapper.Mapper.Map<User>(userFound);
@@ -92,5 +102,23 @@ public class UserService : IUserService
         User? user = await _userRepository.Delete(id);
 
         return ObjectMapper.Mapper.Map<UserDTO>(user);
+    }
+
+    public async Task<UserDTO> ApproveVerification(int courierId)
+    {
+        var user = await GetById(courierId);
+
+        user.VerificationStatus = VerificationStatus.Approved;
+
+        return await Update(user);
+    }
+
+    public async Task<UserDTO> RejectVerification(int courierId)
+    {
+        var user = await GetById(courierId);
+
+        user.VerificationStatus = VerificationStatus.Rejected;
+
+        return await Update(user);
     }
 }

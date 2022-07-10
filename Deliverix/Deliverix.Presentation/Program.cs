@@ -4,6 +4,7 @@ using Deliverix.DAL.Models.Contexts;
 using DispensaryGreen.Presentation.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -104,6 +105,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<HttpExceptionMiddleware>();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
+    RequestPath = "/uploads"
+});
 
 app.MapControllers();
 
