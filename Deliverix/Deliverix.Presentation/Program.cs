@@ -50,13 +50,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Any",
-        policy => policy.RequireRole("Buyer", "Courier", "Admin"));
+        policy => policy.RequireRole("Buyer", "Courier", "Administrator"));
     options.AddPolicy("Buyer",
         policy => policy.RequireRole("Buyer"));
     options.AddPolicy("Courier",
         policy => policy.RequireRole("Courier"));
-    options.AddPolicy("Admin",
-        policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Administrator",
+        policy => policy.RequireRole("Administrator"));
 });
 
 builder.Services.AddSwaggerGen(options => 
