@@ -8,7 +8,7 @@ public interface IOrderService
 {
     public Task<OrderDTO> GetById(int id);
     public Task<OrderDTO> GetByIdWithOrderedProducts(int id);
-    public Task<OrderWithOrderedProductsDTO> GetCurrentForBuyerWithOrderedProducts(int buyerId);
+    public Task<OrderWithOrderedProductsDTO?> GetCurrentForBuyerWithOrderedProducts(int buyerId);
     public Task<OrderWithOrderedProductsDTO> GetCurrentForCourierWithOrderedProducts(int courierId);
     public Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllWithOrderedProducts();
     public Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllPastForBuyer(int buyerId);

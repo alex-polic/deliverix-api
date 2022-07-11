@@ -47,12 +47,9 @@ public class OrderService : IOrderService
         return ObjectMapper.Mapper.Map<OrderDTO>(order);
     }
 
-    public async Task<OrderWithOrderedProductsDTO> GetCurrentForBuyerWithOrderedProducts(int buyerId)
+    public async Task<OrderWithOrderedProductsDTO?> GetCurrentForBuyerWithOrderedProducts(int buyerId)
     {
         var order = await _orderRepository.GetCurrentForBuyerWithOrderedProducts(buyerId);
-        
-        if (order == null)
-            throw new BusinessException("Buyer with given ID does not have pending Order", 400);
         
         return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(order);
     }
