@@ -10,6 +10,7 @@ public interface IOrderRepository
     public Task<Order?> GetCurrentForCourierWithOrderedProducts(int courierId);
     public Task<IEnumerable<Order?>> GetAll();
     public Task<IEnumerable<Order?>> GetAllWithOrderedProducts();
+    public Task<IEnumerable<Order?>> GetAllPastForBuyer(int buyerId);
     public Task<Order> Create(Order order);
     public Task<Order> Update(Order order);
     public Task<Order> Delete(int id);

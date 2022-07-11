@@ -11,6 +11,7 @@ public interface IOrderService
     public Task<OrderWithOrderedProductsDTO> GetCurrentForBuyerWithOrderedProducts(int buyerId);
     public Task<OrderWithOrderedProductsDTO> GetCurrentForCourierWithOrderedProducts(int courierId);
     public Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllWithOrderedProducts();
+    public Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllPastForBuyer(int buyerId);
     public Task<IEnumerable<OrderDTO?>> GetAll();
     public Task<OrderWithOrderedProductsDTO> CreateWithOrderedProducts(OrderCreateDTO order);
     public Task<OrderDTO> Create(OrderDTO order);

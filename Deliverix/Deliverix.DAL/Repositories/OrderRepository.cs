@@ -67,6 +67,15 @@ public class OrderRepository : IOrderRepository
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<Order?>> GetAllPastForBuyer(int buyerId)
+    {
+        return await _collection
+            .Include(e => e.OrderedProducts)
+            .AsNoTracking()
+            .Where(e => e.BuyerId == buyerId && e.DeliveryStatus == DeliveryStatus.Delivered)
+            .ToListAsync();
+    }
+
     public async Task<Order> Create(Order order)
     {
         await _validator.ValidateAndThrowAsync(order);
