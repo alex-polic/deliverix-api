@@ -1,3 +1,4 @@
+using Deliverix.Common.Enums;
 using Deliverix.DAL.Contracts;
 using Deliverix.DAL.Models;
 using Deliverix.DAL.Validators;
@@ -27,9 +28,43 @@ public class OrderRepository : IOrderRepository
         return await _collection.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
     }
 
+    public async Task<Order?> GetByIdWithOrderedProducts(int id)
+    {
+        return await _collection
+            .Include(e => e.OrderedProducts)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(e => e.Id == id);
+    }
+
+    public async Task<Order?> GetCurrentForBuyerWithOrderedProducts(int buyerId)
+    {
+        return await _collection.AsNoTracking()
+            .FirstOrDefaultAsync(
+                e => 
+                    e.BuyerId == buyerId && e.DeliveryStatus == DeliveryStatus.Pending)
+            ;
+    }
+
+    public async Task<Order?> GetCurrentForCourierWithOrderedProducts(int courierId)
+    {
+        return await _collection.AsNoTracking()
+                .FirstOrDefaultAsync(
+                    e => 
+                        e.CourierId == courierId && e.DeliveryStatus == DeliveryStatus.Pending)
+            ;
+    }
+
     public async Task<IEnumerable<Order?>> GetAll()
     {
         return await _collection.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<IEnumerable<Order?>> GetAllWithOrderedProducts()
+    {
+        return await _collection
+            .Include(e => e.OrderedProducts)
+            .AsNoTracking()
+            .ToListAsync();
     }
 
     public async Task<Order> Create(Order order)

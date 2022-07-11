@@ -3,6 +3,7 @@ using Deliverix.BLL.DTOs;
 using Deliverix.BLL.DTOs.Internal;
 using Deliverix.BLL.DTOs.Requests;
 using Deliverix.BLL.Mappers;
+using Deliverix.Common.Enums;
 using Deliverix.Common.Exceptions;
 using Deliverix.DAL;
 using Deliverix.DAL.Contracts;
@@ -15,10 +16,16 @@ public class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
     private readonly UnitOfWork _context;
+
+    private readonly IUserService _userService;
+    private readonly IOrderedProductService _orderedProductService;
     public OrderService()
     {
         _context = new UnitOfWork();
         _orderRepository = new OrderRepository(_context);
+
+        _userService = new UserService();
+        _orderedProductService = new OrderedProductService();
     }
     public async Task<OrderDTO> GetById(int id)
     {
@@ -29,20 +36,42 @@ public class OrderService : IOrderService
         
         return ObjectMapper.Mapper.Map<OrderDTO>(order);
     }
+    
+    public async Task<OrderDTO> GetByIdWithOrderedProducts(int id)
+    {
+        var order = await _orderRepository.GetByIdWithOrderedProducts(id);
+        
+        if (order == null)
+            throw new BusinessException("Order with given ID not found", 400);
+        
+        return ObjectMapper.Mapper.Map<OrderDTO>(order);
+    }
 
     public async Task<OrderWithOrderedProductsDTO> GetCurrentForBuyerWithOrderedProducts(int buyerId)
     {
-        throw new NotImplementedException();
+        var order = await _orderRepository.GetCurrentForBuyerWithOrderedProducts(buyerId);
+        
+        if (order == null)
+            throw new BusinessException("Buyer with given ID does not have pending Order", 400);
+        
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(order);
     }
 
     public async Task<OrderWithOrderedProductsDTO> GetCurrentForCourierWithOrderedProducts(int courierId)
     {
-        throw new NotImplementedException();
+        var order = await _orderRepository.GetCurrentForCourierWithOrderedProducts(courierId);
+        
+        if (order == null)
+            throw new BusinessException("Courier with given ID does not have pending Order", 400);
+        
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(order);
     }
 
     public async Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllWithOrderedProducts()
     {
-        throw new NotImplementedException();
+        var orders = await _orderRepository.GetAllWithOrderedProducts();
+        
+        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsDTO>>(orders);
     }
 
     public async Task<IEnumerable<OrderDTO?>> GetAll()
@@ -54,7 +83,45 @@ public class OrderService : IOrderService
 
     public async Task<OrderWithOrderedProductsDTO> CreateWithOrderedProducts(OrderCreateDTO order)
     {
-        throw new NotImplementedException();
+        if (order.BuyerId <= 0) throw new BusinessException("Buyer ID is mandatory field", 400);
+        if(order.OrderedProducts.Count() <= 0) 
+            throw new BusinessException("Order must have at least one product", 400);
+        if (order.OrderedProducts.Any(e => e.Amount <= 0))
+            throw new BusinessException("All products must have amount of at least 1", 400);
+        
+
+        await _userService.GetById(order.BuyerId);
+        try
+        {
+            await GetCurrentForBuyerWithOrderedProducts(order.BuyerId);
+            throw new BusinessException("Buyer cannot make new Order while they have a pending Order", 400);
+        }
+        catch (BusinessException e)
+        {
+            
+        }
+
+        OrderDTO newOrder = await Create(new OrderDTO()
+        {
+            BuyerId = order.BuyerId,
+            Comment = order.Comment,
+            DeliveryAddress = order.DeliveryAddress,
+            DeliveryStatus = DeliveryStatus.Pending
+        });
+
+        foreach (var orderedProduct in order.OrderedProducts)
+        {
+            await _orderedProductService.Create(new OrderedProductDTO()
+            {
+                OrderId = newOrder.Id,
+                ProductId = orderedProduct.ProductId,
+                Amount = orderedProduct.Amount
+            });
+        }
+
+        var orderToReturn = await GetByIdWithOrderedProducts(newOrder.Id);
+        
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(orderToReturn);
     }
 
     public async Task<OrderDTO> Create(OrderDTO order)
