@@ -41,7 +41,7 @@ public class OrderRepository : IOrderRepository
         return await _collection.AsNoTracking()
             .FirstOrDefaultAsync(
                 e => 
-                    e.BuyerId == buyerId && e.DeliveryStatus == DeliveryStatus.Pending)
+                    e.BuyerId == buyerId && e.DeliveryStatus != DeliveryStatus.Delivered)
             ;
     }
 
@@ -50,7 +50,7 @@ public class OrderRepository : IOrderRepository
         return await _collection.AsNoTracking()
                 .FirstOrDefaultAsync(
                     e => 
-                        e.CourierId == courierId && e.DeliveryStatus == DeliveryStatus.Pending)
+                        e.CourierId == courierId && e.DeliveryStatus != DeliveryStatus.Delivered)
             ;
     }
 
