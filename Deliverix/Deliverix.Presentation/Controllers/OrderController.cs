@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using Deliverix.BLL.Contracts;
 using Deliverix.BLL.DTOs;
+using Deliverix.BLL.DTOs.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +28,37 @@ public class OrderController : Controller
     
     [HttpGet]
     [Authorize(Policy = "Any")]
+    public async Task<IActionResult> GetAllWithOrderedProducts()
+    {
+        var orders = await _service.GetAllWithOrderedProducts();
+
+        return Json(orders);
+    }
+    
+    [HttpGet]
+    [Authorize(Policy = "Buyer")]
+    public async Task<IActionResult> GetCurrentForBuyerWithOrderedProducts()
+    {
+        int buyerId = int.Parse(HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Actor).Value);
+        
+        var orders = await _service.GetCurrentForBuyerWithOrderedProducts(buyerId);
+
+        return Json(orders);
+    }
+    
+    [HttpGet]
+    [Authorize(Policy = "Courier")]
+    public async Task<IActionResult> GetCurrentForCourierWithOrderedProducts()
+    {
+        int courierId = int.Parse(HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Actor).Value);
+        
+        var orders = await _service.GetCurrentForCourierWithOrderedProducts(courierId);
+
+        return Json(orders);
+    }
+    
+    [HttpGet]
+    [Authorize(Policy = "Any")]
     public async Task<IActionResult> GetAll()
     {
         var orders = await _service.GetAll();
@@ -38,6 +71,15 @@ public class OrderController : Controller
     public async Task<IActionResult> Create([FromBody] OrderDTO order)
     {
         var orderCreated = await _service.Create(order);
+
+        return Json(orderCreated);
+    }
+    
+    [HttpPost]
+    [Authorize(Policy = "Buyer")]
+    public async Task<IActionResult> CreateWithOrderedProducts([FromBody] OrderCreateDTO order)
+    {
+        var orderCreated = await _service.CreateWithOrderedProducts(order);
 
         return Json(orderCreated);
     }

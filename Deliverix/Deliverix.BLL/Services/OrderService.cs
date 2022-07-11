@@ -1,5 +1,7 @@
 using Deliverix.BLL.Contracts;
 using Deliverix.BLL.DTOs;
+using Deliverix.BLL.DTOs.Internal;
+using Deliverix.BLL.DTOs.Requests;
 using Deliverix.BLL.Mappers;
 using Deliverix.Common.Exceptions;
 using Deliverix.DAL;
@@ -28,11 +30,31 @@ public class OrderService : IOrderService
         return ObjectMapper.Mapper.Map<OrderDTO>(order);
     }
 
+    public async Task<OrderWithOrderedProductsDTO> GetCurrentForBuyerWithOrderedProducts(int buyerId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<OrderWithOrderedProductsDTO> GetCurrentForCourierWithOrderedProducts(int courierId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllWithOrderedProducts()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<OrderDTO?>> GetAll()
     {
         var orders = await _orderRepository.GetAll();
 
         return ObjectMapper.Mapper.Map<IEnumerable<OrderDTO>>(orders);
+    }
+
+    public async Task<OrderWithOrderedProductsDTO> CreateWithOrderedProducts(OrderCreateDTO order)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<OrderDTO> Create(OrderDTO order)
