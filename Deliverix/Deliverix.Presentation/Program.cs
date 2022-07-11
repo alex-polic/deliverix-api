@@ -1,4 +1,6 @@
 using System.Text;
+using Deliverix.BLL.Contracts;
+using Deliverix.BLL.Services;
 using Deliverix.Common.Configurations;
 using Deliverix.DAL.Models.Contexts;
 using DispensaryGreen.Presentation.Middlewares;
@@ -21,6 +23,9 @@ builder.Services.AddDbContext<DeliverixContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Entities")));
 
 AppConfiguration.Initialize(builder.Configuration);
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 //ConfigureServices
 builder.Services.AddCors(options =>

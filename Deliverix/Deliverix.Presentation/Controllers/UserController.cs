@@ -1,7 +1,6 @@
 using Deliverix.BLL.Contracts;
 using Deliverix.BLL.DTOs;
 using Deliverix.BLL.DTOs.Requests;
-using Deliverix.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +11,9 @@ public class UserController : Controller
 {
     private IUserService _service;
     
-    public UserController()
+    public UserController(IUserService service)
     {
-        _service = new UserService();
+        _service = service;
     }
     
     [HttpGet]
