@@ -11,6 +11,7 @@ public interface IOrderRepository
     public Task<IEnumerable<Order?>> GetAll();
     public Task<IEnumerable<Order?>> GetAllWithOrderedProducts();
     public Task<IEnumerable<Order?>> GetAllPastForBuyer(int buyerId);
+    public Task<IEnumerable<Order?>> GetAllPastForCourier(int courierId);
     public Task<Order> Create(Order order);
     public Task<Order> Update(Order order);
     public Task<Order> Delete(int id);

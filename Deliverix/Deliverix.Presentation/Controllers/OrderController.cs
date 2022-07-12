@@ -75,6 +75,15 @@ public class OrderController : Controller
         return Json(orders);
     }
     
+    [HttpGet]
+    [Authorize(Policy = "Courier")]
+    public async Task<IActionResult> GetAllPastForCourier(int courierId)
+    {
+        var orders = await _service.GetAllPastForCourier(courierId);
+
+        return Json(orders);
+    }
+    
     [HttpPost]
     [Authorize(Policy = "Buyer")]
     public async Task<IActionResult> Create([FromBody] OrderDTO order)

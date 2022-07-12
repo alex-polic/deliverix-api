@@ -80,6 +80,13 @@ public class OrderService : IOrderService
         return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsDTO>>(orders);
     }
 
+    public async Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllPastForCourier(int courierId)
+    {
+        var orders = await _orderRepository.GetAllPastForCourier(courierId);
+
+        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsDTO>>(orders);
+    }
+
     public async Task<IEnumerable<OrderDTO?>> GetAll()
     {
         var orders = await _orderRepository.GetAll();
