@@ -19,6 +19,7 @@ public class OrderService : IOrderService
 
     private readonly IUserService _userService;
     private readonly IOrderedProductService _orderedProductService;
+    private readonly IProductService _productService;
     public OrderService()
     {
         _context = new UnitOfWork();
@@ -26,6 +27,7 @@ public class OrderService : IOrderService
 
         _userService = new UserService();
         _orderedProductService = new OrderedProductService();
+        _productService = new ProductService();
     }
     public async Task<OrderDTO> GetById(int id)
     {
@@ -95,20 +97,19 @@ public class OrderService : IOrderService
         
 
         await _userService.GetById(order.BuyerId);
-        try
-        {
-            await GetCurrentForBuyerWithOrderedProducts(order.BuyerId);
+        
+        var currentOrder = await GetCurrentForBuyerWithOrderedProducts(order.BuyerId);
+        if(currentOrder != null)
             throw new BusinessException("Buyer cannot make new Order while they have a pending Order", 400);
-        }
-        catch (BusinessException e)
-        {
-            
-        }
+        
+
+        decimal fullPrice = await getFullPriceFromOrderedProducts(order.OrderedProducts);
 
         OrderDTO newOrder = await Create(new OrderDTO()
         {
             BuyerId = order.BuyerId,
             Comment = order.Comment,
+            FullPrice = fullPrice,
             DeliveryAddress = order.DeliveryAddress,
             DeliveryStatus = DeliveryStatus.Pending
         });
@@ -126,6 +127,20 @@ public class OrderService : IOrderService
         var orderToReturn = await GetByIdWithOrderedProducts(newOrder.Id);
         
         return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(orderToReturn);
+    }
+
+    private async Task<decimal> getFullPriceFromOrderedProducts(IEnumerable<OrderedProductCreateDTO> orderedProducts)
+    {
+        decimal fullPrice = 0;
+        
+        foreach (var orderedProduct in orderedProducts)
+        {
+            var product = await _productService.GetById(orderedProduct.ProductId);
+
+            fullPrice += product.Price * orderedProduct.Amount;
+        }
+
+        return fullPrice;
     }
 
     public async Task<OrderDTO> Create(OrderDTO order)
