@@ -65,7 +65,8 @@ public class AuthController : Controller
         var id = HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Actor).Value;
         var email = HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Email).Value;
         var role = HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Role).Value;
+        var verificationStatus = HttpContext.User.Claims.First(e => e.Type == "verificationStatus").Value;
 
-        return Json(new { id, email, role });
+        return Json(new { id, email, role, verificationStatus });
     }
 }

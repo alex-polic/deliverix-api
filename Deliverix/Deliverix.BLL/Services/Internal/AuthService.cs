@@ -79,6 +79,7 @@ public class AuthService : IAuthService
                 new (ClaimTypes.Actor, found.Id.ToString()),
                 new (ClaimTypes.Email, found.Email),
                 new (ClaimTypes.Role, found.UserType.ToString()),
+                new ("verificationStatus", found.VerificationStatus.ToString()),
                 new ("issued at", DateTime.UtcNow.ToString())
             }
         );
