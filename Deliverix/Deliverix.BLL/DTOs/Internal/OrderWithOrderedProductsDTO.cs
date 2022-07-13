@@ -12,7 +12,7 @@ public class OrderWithOrderedProductsDTO
     public string Comment { get; set; }
     public decimal FullPrice { get; set; }
     public DeliveryStatus DeliveryStatus { get; set; }
-    
+    public DateTime? DeliveryDateTime { set; get; }
     
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

@@ -105,6 +105,15 @@ public class OrderController : Controller
     }
     
     [HttpPost]
+    [Authorize(Policy = "Any")]
+    public async Task<IActionResult> FinishDeliveryOfOrder(int orderId)
+    {
+        var orders = await _service.FinishDeliveryOfOrder(orderId);
+
+        return Json(orders);
+    }
+    
+    [HttpPost]
     [Authorize(Policy = "Buyer")]
     public async Task<IActionResult> Create([FromBody] OrderDTO order)
     {

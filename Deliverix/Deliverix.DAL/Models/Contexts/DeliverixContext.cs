@@ -91,6 +91,8 @@ public class DeliverixContext : DbContext
 
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             
+            entity.Property(e => e.DeliveryDateTime).IsRequired(false).HasColumnType("datetime");
+            
             entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
             
             entity.HasOne(o => o.Buyer)

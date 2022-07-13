@@ -106,10 +106,27 @@ public class OrderService : IOrderService
         
         order.CourierId = courierId;
         order.DeliveryStatus = DeliveryStatus.Accepted;
+        order.DeliveryDateTime = DateTime.Now.AddSeconds(new Random().Next(10, 20));
 
         await Update(order);
 
-        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(order);;
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(order);
+    }
+
+    public async Task<OrderWithOrderedProductsDTO?> FinishDeliveryOfOrder(int orderId)
+    {
+        var order = await GetById(orderId);
+
+        if (order.DeliveryStatus != DeliveryStatus.Accepted)
+            throw new BusinessException("Delivery status must be Accepted", 400);
+        if(order.CourierId == null)
+            throw new BusinessException("This order is not accepted by a courier", 400);
+
+        order.DeliveryStatus = DeliveryStatus.Delivered;
+
+        await Update(order);
+
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(order);
     }
 
     public async Task<IEnumerable<OrderDTO?>> GetAll()
@@ -199,6 +216,7 @@ public class OrderService : IOrderService
         orderFound.Comment = order.Comment;
         orderFound.FullPrice = order.FullPrice;
         orderFound.DeliveryStatus = order.DeliveryStatus;
+        orderFound.DeliveryDateTime = order.DeliveryDateTime;
         
         Order model = ObjectMapper.Mapper.Map<Order>(orderFound);
         

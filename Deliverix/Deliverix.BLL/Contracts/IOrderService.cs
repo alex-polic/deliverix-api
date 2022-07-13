@@ -15,6 +15,7 @@ public interface IOrderService
     public Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllPastForCourier(int courierId);
     public Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllPendingOrders();
     public Task<OrderWithOrderedProductsDTO?> AcceptDeliveryOfOrder(int orderId, int courierId);
+    public Task<OrderWithOrderedProductsDTO?> FinishDeliveryOfOrder(int orderId);
     public Task<IEnumerable<OrderDTO?>> GetAll();
     public Task<OrderWithOrderedProductsDTO> CreateWithOrderedProducts(OrderCreateDTO order);
     public Task<OrderDTO> Create(OrderDTO order);

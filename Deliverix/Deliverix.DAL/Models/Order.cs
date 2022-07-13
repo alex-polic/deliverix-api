@@ -17,8 +17,8 @@ public class Order
     public string Comment { get; set; }
     public decimal FullPrice { get; set; }
     public DeliveryStatus DeliveryStatus { get; set; }
-    
-    
+
+    public DateTime? DeliveryDateTime { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     
