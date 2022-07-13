@@ -84,6 +84,26 @@ public class OrderController : Controller
         return Json(orders);
     }
     
+    [HttpGet]
+    [Authorize(Policy = "Courier")]
+    public async Task<IActionResult> GetAllPendingOrders()
+    {
+        var orders = await _service.GetAllPendingOrders();
+
+        return Json(orders);
+    }
+    
+    [HttpPost]
+    [Authorize(Policy = "Courier")]
+    public async Task<IActionResult> AcceptDeliveryOfOrder(int orderId)
+    {
+        int courierId = int.Parse(HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Actor).Value);
+
+        var orders = await _service.AcceptDeliveryOfOrder(orderId, courierId);
+
+        return Json(orders);
+    }
+    
     [HttpPost]
     [Authorize(Policy = "Buyer")]
     public async Task<IActionResult> Create([FromBody] OrderDTO order)

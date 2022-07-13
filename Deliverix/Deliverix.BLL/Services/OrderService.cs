@@ -60,9 +60,6 @@ public class OrderService : IOrderService
     {
         var order = await _orderRepository.GetCurrentForCourierWithOrderedProducts(courierId);
         
-        if (order == null)
-            throw new BusinessException("Courier with given ID does not have pending Order", 400);
-        
         return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(order);
     }
 
@@ -85,6 +82,34 @@ public class OrderService : IOrderService
         var orders = await _orderRepository.GetAllPastForCourier(courierId);
 
         return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsDTO>>(orders);
+    }
+
+    public async Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllPendingOrders()
+    {
+        var orders = await _orderRepository.GetAllPendingOrders();
+
+        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsDTO>>(orders);
+    }
+
+    public async Task<OrderWithOrderedProductsDTO?> AcceptDeliveryOfOrder(int orderId, int courierId)
+    {
+        var order = await GetById(orderId);
+
+        if (order.DeliveryStatus != DeliveryStatus.Pending)
+            throw new BusinessException("Delivery status must be Pending", 400);
+        if(order.CourierId != null)
+            throw new BusinessException("This order is accepted by different courier", 400);
+
+        var courierCurrentOrder = await GetCurrentForCourierWithOrderedProducts(courierId);
+        if(courierCurrentOrder != null)
+            throw new BusinessException("Courier already accepted different order ", 400);
+        
+        order.CourierId = courierId;
+        order.DeliveryStatus = DeliveryStatus.Accepted;
+
+        await Update(order);
+
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(order);;
     }
 
     public async Task<IEnumerable<OrderDTO?>> GetAll()

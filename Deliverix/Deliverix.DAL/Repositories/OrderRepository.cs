@@ -41,8 +41,8 @@ public class OrderRepository : IOrderRepository
         return await _collection.AsNoTracking()
             .FirstOrDefaultAsync(
                 e => 
-                    e.BuyerId == buyerId && e.DeliveryStatus != DeliveryStatus.Delivered)
-            ;
+                    e.BuyerId == buyerId && e.DeliveryStatus != DeliveryStatus.Delivered
+            );
     }
 
     public async Task<Order?> GetCurrentForCourierWithOrderedProducts(int courierId)
@@ -50,8 +50,8 @@ public class OrderRepository : IOrderRepository
         return await _collection.AsNoTracking()
                 .FirstOrDefaultAsync(
                     e => 
-                        e.CourierId == courierId && e.DeliveryStatus != DeliveryStatus.Delivered)
-            ;
+                        e.CourierId == courierId && e.DeliveryStatus != DeliveryStatus.Delivered
+                );
     }
 
     public async Task<IEnumerable<Order?>> GetAll()
@@ -82,6 +82,15 @@ public class OrderRepository : IOrderRepository
             .Include(e => e.OrderedProducts)
             .AsNoTracking()
             .Where(e => e.CourierId == courierId && e.DeliveryStatus == DeliveryStatus.Delivered)
+            .ToListAsync();    
+    }
+    
+    public async Task<IEnumerable<Order?>> GetAllPendingOrders()
+    {
+        return await _collection
+            .Include(e => e.OrderedProducts)
+            .AsNoTracking()
+            .Where(e => e.CourierId == null && e.DeliveryStatus == DeliveryStatus.Pending)
             .ToListAsync();    
     }
 
