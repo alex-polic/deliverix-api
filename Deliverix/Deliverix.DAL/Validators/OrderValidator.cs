@@ -7,6 +7,7 @@ public class OrderValidator : AbstractValidator<Order>
 {
     public OrderValidator()
     {
-        
+        RuleFor(e => e.BuyerId).NotNull().GreaterThan(0).WithMessage("Buyer is mandatory field");
+        RuleFor(e => e.DeliveryAddress).NotEmpty().WithMessage("Delivery address is mandatory field");
     }
 }

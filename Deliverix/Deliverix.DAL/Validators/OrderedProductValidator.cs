@@ -7,6 +7,8 @@ public class OrderedProductValidator : AbstractValidator<OrderedProduct>
 {
     public OrderedProductValidator()
     {
-        
+        RuleFor(e => e.OrderId).NotNull().WithMessage("Order is mandatory field");
+        RuleFor(e => e.Product).NotNull().WithMessage("Product is mandatory field");
+        RuleFor(e => e.Amount).NotNull().GreaterThan(0).WithMessage("Amount is mandatory field");
     }
 }
