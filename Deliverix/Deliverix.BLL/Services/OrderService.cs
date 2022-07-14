@@ -3,6 +3,7 @@ using Deliverix.BLL.DTOs;
 using Deliverix.BLL.DTOs.Internal;
 using Deliverix.BLL.DTOs.Requests;
 using Deliverix.BLL.Mappers;
+using Deliverix.Common.Configurations;
 using Deliverix.Common.Enums;
 using Deliverix.Common.Exceptions;
 using Deliverix.DAL;
@@ -20,6 +21,8 @@ public class OrderService : IOrderService
     private readonly IUserService _userService;
     private readonly IOrderedProductService _orderedProductService;
     private readonly IProductService _productService;
+
+    private readonly int DELIVERY_CHARGE;
     public OrderService()
     {
         _context = new UnitOfWork();
@@ -28,6 +31,8 @@ public class OrderService : IOrderService
         _userService = new UserService();
         _orderedProductService = new OrderedProductService();
         _productService = new ProductService();
+
+        DELIVERY_CHARGE = int.Parse(AppConfiguration.GetConfiguration("DeliveryCharge"));
     }
     public async Task<OrderDTO> GetById(int id)
     {
@@ -158,7 +163,7 @@ public class OrderService : IOrderService
         {
             BuyerId = order.BuyerId,
             Comment = order.Comment,
-            FullPrice = fullPrice,
+            FullPrice = fullPrice + DELIVERY_CHARGE,
             DeliveryAddress = order.DeliveryAddress,
             DeliveryStatus = DeliveryStatus.Pending
         });
