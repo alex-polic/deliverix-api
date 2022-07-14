@@ -49,49 +49,49 @@ public class OrderService : IOrderService
         return ObjectMapper.Mapper.Map<OrderDTO>(order);
     }
 
-    public async Task<OrderWithOrderedProductsDTO?> GetCurrentForBuyerWithOrderedProducts(int buyerId)
+    public async Task<OrderWithOrderedProductsAndBuyerAndCourierDTO?> GetCurrentForBuyerWithOrderedProducts(int buyerId)
     {
         var order = await _orderRepository.GetCurrentForBuyerWithOrderedProducts(buyerId);
         
-        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(order);
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndCourierDTO>(order);
     }
 
-    public async Task<OrderWithOrderedProductsDTO> GetCurrentForCourierWithOrderedProducts(int courierId)
+    public async Task<OrderWithOrderedProductsAndBuyerAndCourierDTO> GetCurrentForCourierWithOrderedProducts(int courierId)
     {
         var order = await _orderRepository.GetCurrentForCourierWithOrderedProducts(courierId);
         
-        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(order);
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndCourierDTO>(order);
     }
 
-    public async Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllWithOrderedProducts()
+    public async Task<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO?>> GetAllWithOrderedProducts()
     {
         var orders = await _orderRepository.GetAllWithOrderedProducts();
         
-        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsDTO>>(orders);
+        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO>>(orders);
     }
 
-    public async Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllPastForBuyer(int buyerId)
+    public async Task<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO?>> GetAllPastForBuyer(int buyerId)
     {
         var orders = await _orderRepository.GetAllPastForBuyer(buyerId);
 
-        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsDTO>>(orders);
+        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO>>(orders);
     }
 
-    public async Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllPastForCourier(int courierId)
+    public async Task<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO?>> GetAllPastForCourier(int courierId)
     {
         var orders = await _orderRepository.GetAllPastForCourier(courierId);
 
-        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsDTO>>(orders);
+        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO>>(orders);
     }
 
-    public async Task<IEnumerable<OrderWithOrderedProductsDTO?>> GetAllPendingOrders()
+    public async Task<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO?>> GetAllPendingOrders()
     {
         var orders = await _orderRepository.GetAllPendingOrders();
 
-        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsDTO>>(orders);
+        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO>>(orders);
     }
 
-    public async Task<OrderWithOrderedProductsDTO?> AcceptDeliveryOfOrder(int orderId, int courierId)
+    public async Task<OrderWithOrderedProductsAndBuyerAndCourierDTO?> AcceptDeliveryOfOrder(int orderId, int courierId)
     {
         var order = await GetById(orderId);
 
@@ -110,10 +110,10 @@ public class OrderService : IOrderService
 
         await Update(order);
 
-        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(order);
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndCourierDTO>(order);
     }
 
-    public async Task<OrderWithOrderedProductsDTO?> FinishDeliveryOfOrder(int orderId)
+    public async Task<OrderWithOrderedProductsAndBuyerAndCourierDTO?> FinishDeliveryOfOrder(int orderId)
     {
         var order = await GetById(orderId);
 
@@ -126,7 +126,7 @@ public class OrderService : IOrderService
 
         await Update(order);
 
-        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(order);
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndCourierDTO>(order);
     }
 
     public async Task<IEnumerable<OrderDTO?>> GetAll()
@@ -136,7 +136,7 @@ public class OrderService : IOrderService
         return ObjectMapper.Mapper.Map<IEnumerable<OrderDTO>>(orders);
     }
 
-    public async Task<OrderWithOrderedProductsDTO> CreateWithOrderedProducts(OrderCreateDTO order)
+    public async Task<OrderWithOrderedProductsAndBuyerAndCourierDTO> CreateWithOrderedProducts(OrderCreateDTO order)
     {
         if (order.BuyerId <= 0) throw new BusinessException("Buyer ID is mandatory field", 400);
         if(order.OrderedProducts.Count() <= 0) 
@@ -175,7 +175,7 @@ public class OrderService : IOrderService
 
         var orderToReturn = await GetByIdWithOrderedProducts(newOrder.Id);
         
-        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsDTO>(orderToReturn);
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndCourierDTO>(orderToReturn);
     }
 
     private async Task<decimal> getFullPriceFromOrderedProducts(IEnumerable<OrderedProductCreateDTO> orderedProducts)

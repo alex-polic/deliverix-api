@@ -9,11 +9,11 @@ public class MapperProfile : Profile
 {
     public MapperProfile()
     {
+        CreateMap<Order, OrderWithOrderedProductsAndBuyerAndCourierDTO>().ReverseMap();
+        CreateMap<Order, OrderDTO>().ReverseMap();
+        CreateMap<OrderDTO, OrderWithOrderedProductsAndBuyerAndCourierDTO>().ReverseMap();
         CreateMap<User, UserDTO>().ReverseMap();
         CreateMap<Product, ProductDTO>().ReverseMap();
-        CreateMap<Order, OrderDTO>().ReverseMap();
-        CreateMap<Order, OrderWithOrderedProductsDTO>().ReverseMap();
-        CreateMap<OrderDTO, OrderWithOrderedProductsDTO>().ReverseMap();
         CreateMap<OrderedProduct, OrderedProductDTO>().ReverseMap();
     }
 }

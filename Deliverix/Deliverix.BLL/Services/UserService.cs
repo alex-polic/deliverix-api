@@ -1,6 +1,8 @@
 using Deliverix.BLL.Contracts;
+using Deliverix.BLL.Contracts.Internal;
 using Deliverix.BLL.DTOs;
 using Deliverix.BLL.Mappers;
+using Deliverix.BLL.Services.Internal;
 using Deliverix.Common.Enums;
 using Deliverix.Common.Exceptions;
 using Deliverix.Common.Helpers;
@@ -14,12 +16,15 @@ namespace Deliverix.BLL.Services;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IEmailService _emailService;
     private UnitOfWork _context;
 
     public UserService()
     {
         _context = new UnitOfWork();
         _userRepository = new UserRepository(_context);
+
+        _emailService = new EmailService();
     }
 
     public async Task<UserDTO> GetByEmail(string email)
@@ -109,6 +114,11 @@ public class UserService : IUserService
         var user = await GetById(courierId);
 
         user.VerificationStatus = VerificationStatus.Approved;
+        
+        _emailService.SendEmailNotification(
+            "Your verification is approved", 
+            user.Email
+        );
 
         return await Update(user);
     }
@@ -118,6 +128,11 @@ public class UserService : IUserService
         var user = await GetById(courierId);
 
         user.VerificationStatus = VerificationStatus.Rejected;
+        
+        _emailService.SendEmailNotification(
+            "Your verification is rejected", 
+            user.Email
+        );
 
         return await Update(user);
     }

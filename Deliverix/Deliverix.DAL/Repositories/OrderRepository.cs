@@ -32,6 +32,8 @@ public class OrderRepository : IOrderRepository
     {
         return await _collection
             .Include(e => e.OrderedProducts)
+            .Include(e => e.Buyer)
+            .Include(e => e.Courier)
             .AsNoTracking()
             .FirstOrDefaultAsync(e => e.Id == id);
     }
@@ -63,6 +65,8 @@ public class OrderRepository : IOrderRepository
     {
         return await _collection
             .Include(e => e.OrderedProducts)
+            .Include(e => e.Buyer)
+            .Include(e => e.Courier)
             .AsNoTracking()
             .ToListAsync();
     }
@@ -71,6 +75,8 @@ public class OrderRepository : IOrderRepository
     {
         return await _collection
             .Include(e => e.OrderedProducts)
+            .Include(e => e.Buyer)
+            .Include(e => e.Courier)
             .AsNoTracking()
             .Where(e => e.BuyerId == buyerId && e.DeliveryStatus == DeliveryStatus.Delivered)
             .ToListAsync();
@@ -80,6 +86,8 @@ public class OrderRepository : IOrderRepository
     {
         return await _collection
             .Include(e => e.OrderedProducts)
+            .Include(e => e.Buyer)
+            .Include(e => e.Courier)
             .AsNoTracking()
             .Where(e => e.CourierId == courierId && e.DeliveryStatus == DeliveryStatus.Delivered)
             .ToListAsync();    
@@ -89,6 +97,8 @@ public class OrderRepository : IOrderRepository
     {
         return await _collection
             .Include(e => e.OrderedProducts)
+            .Include(e => e.Buyer)
+            .Include(e => e.Courier)
             .AsNoTracking()
             .Where(e => e.CourierId == null && e.DeliveryStatus == DeliveryStatus.Pending)
             .ToListAsync();    
