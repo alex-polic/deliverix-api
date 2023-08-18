@@ -107,7 +107,7 @@ public class DeliverixContext : DbContext
                 .HasForeignKey(d => d.SellerId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction)
-                .HasConstraintName("FK_Courier_Orders");
+                .HasConstraintName("FK_Seller_Orders");
         });
         
         modelBuilder.Entity<OrderedProduct>(entity =>

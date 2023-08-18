@@ -38,9 +38,6 @@ namespace Deliverix.DAL.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("CourierId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
@@ -59,6 +56,9 @@ namespace Deliverix.DAL.Migrations
                     b.Property<decimal>("FullPrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("SellerId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
 
@@ -66,7 +66,7 @@ namespace Deliverix.DAL.Migrations
 
                     b.HasIndex("BuyerId");
 
-                    b.HasIndex("CourierId");
+                    b.HasIndex("SellerId");
 
                     b.ToTable("Order", (string)null);
                 });
@@ -202,15 +202,15 @@ namespace Deliverix.DAL.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Buyer_Orders");
 
-                    b.HasOne("Deliverix.DAL.Models.User", "Courier")
-                        .WithMany("CourierOrders")
-                        .HasForeignKey("CourierId")
+                    b.HasOne("Deliverix.DAL.Models.User", "Seller")
+                        .WithMany("SellerOrders")
+                        .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.NoAction)
-                        .HasConstraintName("FK_Courier_Orders");
+                        .HasConstraintName("FK_Seller_Orders");
 
                     b.Navigation("Buyer");
 
-                    b.Navigation("Courier");
+                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("Deliverix.DAL.Models.OrderedProduct", b =>
@@ -248,7 +248,7 @@ namespace Deliverix.DAL.Migrations
                 {
                     b.Navigation("BuyerOrders");
 
-                    b.Navigation("CourierOrders");
+                    b.Navigation("SellerOrders");
                 });
 #pragma warning restore 612, 618
         }

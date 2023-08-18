@@ -58,11 +58,12 @@ namespace Deliverix.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BuyerId = table.Column<int>(type: "int", nullable: false),
-                    CourierId = table.Column<int>(type: "int", nullable: true),
+                    SellerId = table.Column<int>(type: "int", nullable: true),
                     DeliveryAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     FullPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DeliveryStatus = table.Column<int>(type: "int", maxLength: 256, nullable: false),
+                    DeliveryDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -76,8 +77,8 @@ namespace Deliverix.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Courier_Orders",
-                        column: x => x.CourierId,
+                        name: "FK_Seller_Orders",
+                        column: x => x.SellerId,
                         principalTable: "User",
                         principalColumn: "Id");
                 });
@@ -117,9 +118,9 @@ namespace Deliverix.DAL.Migrations
                 column: "BuyerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_CourierId",
+                name: "IX_Order_SellerId",
                 table: "Order",
-                column: "CourierId");
+                column: "SellerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderedProduct_OrderId",
