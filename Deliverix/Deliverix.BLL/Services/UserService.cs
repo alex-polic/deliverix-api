@@ -54,11 +54,11 @@ public class UserService : IUserService
         return ObjectMapper.Mapper.Map<IEnumerable<UserDTO>>(users);
     }
 
-    public async Task<IEnumerable<UserDTO>> GetAllCouriers()
+    public async Task<IEnumerable<UserDTO>> GetAllSellers()
     {
         var users = await _userRepository.GetAll();
         
-        users = users.Where(e => e.UserType == UserType.Courier);
+        users = users.Where(e => e.UserType == UserType.Seller);
         
         return ObjectMapper.Mapper.Map<IEnumerable<UserDTO>>(users);
     }
@@ -109,9 +109,9 @@ public class UserService : IUserService
         return ObjectMapper.Mapper.Map<UserDTO>(user);
     }
 
-    public async Task<UserDTO> ApproveVerification(int courierId)
+    public async Task<UserDTO> ApproveVerification(int sellerId)
     {
-        var user = await GetById(courierId);
+        var user = await GetById(sellerId);
 
         user.VerificationStatus = VerificationStatus.Approved;
         
@@ -123,9 +123,9 @@ public class UserService : IUserService
         return await Update(user);
     }
 
-    public async Task<UserDTO> RejectVerification(int courierId)
+    public async Task<UserDTO> RejectVerification(int sellerId)
     {
-        var user = await GetById(courierId);
+        var user = await GetById(sellerId);
 
         user.VerificationStatus = VerificationStatus.Rejected;
         

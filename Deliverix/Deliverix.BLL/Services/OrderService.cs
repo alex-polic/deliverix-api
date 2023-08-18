@@ -54,84 +54,84 @@ public class OrderService : IOrderService
         return ObjectMapper.Mapper.Map<OrderDTO>(order);
     }
 
-    public async Task<OrderWithOrderedProductsAndBuyerAndCourierDTO?> GetCurrentForBuyerWithOrderedProducts(int buyerId)
+    public async Task<OrderWithOrderedProductsAndBuyerAndSellerDTO?> GetCurrentForBuyerWithOrderedProducts(int buyerId)
     {
         var order = await _orderRepository.GetCurrentForBuyerWithOrderedProducts(buyerId);
         
-        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndCourierDTO>(order);
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndSellerDTO>(order);
     }
 
-    public async Task<OrderWithOrderedProductsAndBuyerAndCourierDTO> GetCurrentForCourierWithOrderedProducts(int courierId)
+    public async Task<OrderWithOrderedProductsAndBuyerAndSellerDTO> GetCurrentForSellerWithOrderedProducts(int sellerId)
     {
-        var order = await _orderRepository.GetCurrentForCourierWithOrderedProducts(courierId);
+        var order = await _orderRepository.GetCurrentForSellerWithOrderedProducts(sellerId);
         
-        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndCourierDTO>(order);
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndSellerDTO>(order);
     }
 
-    public async Task<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO?>> GetAllWithOrderedProducts()
+    public async Task<IEnumerable<OrderWithOrderedProductsAndBuyerAndSellerDTO?>> GetAllWithOrderedProducts()
     {
         var orders = await _orderRepository.GetAllWithOrderedProducts();
         
-        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO>>(orders);
+        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsAndBuyerAndSellerDTO>>(orders);
     }
 
-    public async Task<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO?>> GetAllPastForBuyer(int buyerId)
+    public async Task<IEnumerable<OrderWithOrderedProductsAndBuyerAndSellerDTO?>> GetAllPastForBuyer(int buyerId)
     {
         var orders = await _orderRepository.GetAllPastForBuyer(buyerId);
 
-        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO>>(orders);
+        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsAndBuyerAndSellerDTO>>(orders);
     }
 
-    public async Task<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO?>> GetAllPastForCourier(int courierId)
+    public async Task<IEnumerable<OrderWithOrderedProductsAndBuyerAndSellerDTO?>> GetAllPastForSeller(int sellerId)
     {
-        var orders = await _orderRepository.GetAllPastForCourier(courierId);
+        var orders = await _orderRepository.GetAllPastForSeller(sellerId);
 
-        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO>>(orders);
+        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsAndBuyerAndSellerDTO>>(orders);
     }
 
-    public async Task<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO?>> GetAllPendingOrders()
+    public async Task<IEnumerable<OrderWithOrderedProductsAndBuyerAndSellerDTO?>> GetAllPendingOrders()
     {
         var orders = await _orderRepository.GetAllPendingOrders();
 
-        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsAndBuyerAndCourierDTO>>(orders);
+        return ObjectMapper.Mapper.Map<IEnumerable<OrderWithOrderedProductsAndBuyerAndSellerDTO>>(orders);
     }
 
-    public async Task<OrderWithOrderedProductsAndBuyerAndCourierDTO?> AcceptDeliveryOfOrder(int orderId, int courierId)
+    public async Task<OrderWithOrderedProductsAndBuyerAndSellerDTO?> AcceptDeliveryOfOrder(int orderId, int sellerId)
     {
         var order = await GetById(orderId);
 
         if (order.DeliveryStatus != DeliveryStatus.Pending)
             throw new BusinessException("Delivery status must be Pending", 400);
-        if(order.CourierId != null)
-            throw new BusinessException("This order is accepted by different courier", 400);
+        if(order.SellerId != null)
+            throw new BusinessException("This order is accepted by different seller", 400);
 
-        var courierCurrentOrder = await GetCurrentForCourierWithOrderedProducts(courierId);
-        if(courierCurrentOrder != null)
-            throw new BusinessException("Courier already accepted different order ", 400);
+        var sellerCurrentOrder = await GetCurrentForSellerWithOrderedProducts(sellerId);
+        if(sellerCurrentOrder != null)
+            throw new BusinessException("Seller already accepted different order ", 400);
         
-        order.CourierId = courierId;
+        order.SellerId = sellerId;
         order.DeliveryStatus = DeliveryStatus.Accepted;
         order.DeliveryDateTime = DateTime.Now.AddSeconds(new Random().Next(10, 20));
 
         await Update(order);
 
-        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndCourierDTO>(order);
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndSellerDTO>(order);
     }
 
-    public async Task<OrderWithOrderedProductsAndBuyerAndCourierDTO?> FinishDeliveryOfOrder(int orderId)
+    public async Task<OrderWithOrderedProductsAndBuyerAndSellerDTO?> FinishDeliveryOfOrder(int orderId)
     {
         var order = await GetById(orderId);
 
         if (order.DeliveryStatus != DeliveryStatus.Accepted)
             throw new BusinessException("Delivery status must be Accepted", 400);
-        if(order.CourierId == null)
-            throw new BusinessException("This order is not accepted by a courier", 400);
+        if(order.SellerId == null)
+            throw new BusinessException("This order is not accepted by a seller", 400);
 
         order.DeliveryStatus = DeliveryStatus.Delivered;
 
         await Update(order);
 
-        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndCourierDTO>(order);
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndSellerDTO>(order);
     }
 
     public async Task<IEnumerable<OrderDTO?>> GetAll()
@@ -141,7 +141,7 @@ public class OrderService : IOrderService
         return ObjectMapper.Mapper.Map<IEnumerable<OrderDTO>>(orders);
     }
 
-    public async Task<OrderWithOrderedProductsAndBuyerAndCourierDTO> CreateWithOrderedProducts(OrderCreateDTO order)
+    public async Task<OrderWithOrderedProductsAndBuyerAndSellerDTO> CreateWithOrderedProducts(OrderCreateDTO order)
     {
         if (order.BuyerId <= 0) throw new BusinessException("Buyer ID is mandatory field", 400);
         if(order.OrderedProducts.Count() <= 0) 
@@ -180,7 +180,7 @@ public class OrderService : IOrderService
 
         var orderToReturn = await GetByIdWithOrderedProducts(newOrder.Id);
         
-        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndCourierDTO>(orderToReturn);
+        return ObjectMapper.Mapper.Map<OrderWithOrderedProductsAndBuyerAndSellerDTO>(orderToReturn);
     }
 
     private async Task<decimal> getFullPriceFromOrderedProducts(IEnumerable<OrderedProductCreateDTO> orderedProducts)
@@ -216,7 +216,7 @@ public class OrderService : IOrderService
             throw new BusinessException("Order with given ID does not exist", 400);
 
         orderFound.BuyerId = order.BuyerId;
-        orderFound.CourierId = order.CourierId;
+        orderFound.SellerId = order.SellerId;
         orderFound.DeliveryAddress = order.DeliveryAddress;
         orderFound.Comment = order.Comment;
         orderFound.FullPrice = order.FullPrice;

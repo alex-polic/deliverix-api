@@ -2,12 +2,12 @@ using Deliverix.Common.Enums;
 
 namespace Deliverix.BLL.DTOs.Internal;
 
-public class OrderWithOrderedProductsAndBuyerAndCourierDTO
+public class OrderWithOrderedProductsAndBuyerAndSellerDTO
 {
     public int Id { get; set; }
 
     public int BuyerId { get; set; }
-    public int? CourierId { get; set; }
+    public int? SellerId { get; set; }
     public string DeliveryAddress { get; set; }
     public string Comment { get; set; }
     public decimal FullPrice { get; set; }
@@ -19,5 +19,5 @@ public class OrderWithOrderedProductsAndBuyerAndCourierDTO
     
     public IEnumerable<OrderedProductDTO> OrderedProducts { get; set; }
     public UserDTO Buyer { get; set; }
-    public UserDTO? Courier { get; set; }
+    public UserDTO? Seller { get; set; }
 }

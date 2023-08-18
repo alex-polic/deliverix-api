@@ -102,9 +102,9 @@ public class DeliverixContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Buyer_Orders");
             
-            entity.HasOne(o => o.Courier)
-                .WithMany(u => u.CourierOrders)
-                .HasForeignKey(d => d.CourierId)
+            entity.HasOne(o => o.Seller)
+                .WithMany(u => u.SellerOrders)
+                .HasForeignKey(d => d.SellerId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction)
                 .HasConstraintName("FK_Courier_Orders");

@@ -47,12 +47,12 @@ public class OrderController : Controller
     }
     
     [HttpGet]
-    [Authorize(Policy = "Courier")]
-    public async Task<IActionResult> GetCurrentForCourierWithOrderedProducts()
+    [Authorize(Policy = "Seller")]
+    public async Task<IActionResult> GetCurrentForSellerWithOrderedProducts()
     {
-        int courierId = int.Parse(HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Actor).Value);
+        int sellerId = int.Parse(HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Actor).Value);
         
-        var orders = await _service.GetCurrentForCourierWithOrderedProducts(courierId);
+        var orders = await _service.GetCurrentForSellerWithOrderedProducts(sellerId);
 
         return Json(orders);
     }
@@ -76,16 +76,16 @@ public class OrderController : Controller
     }
     
     [HttpGet]
-    [Authorize(Policy = "Courier")]
-    public async Task<IActionResult> GetAllPastForCourier(int courierId)
+    [Authorize(Policy = "Seller")]
+    public async Task<IActionResult> GetAllPastForSeller(int sellerId)
     {
-        var orders = await _service.GetAllPastForCourier(courierId);
+        var orders = await _service.GetAllPastForSeller(sellerId);
 
         return Json(orders);
     }
     
     [HttpGet]
-    [Authorize(Policy = "Courier")]
+    [Authorize(Policy = "Seller")]
     public async Task<IActionResult> GetAllPendingOrders()
     {
         var orders = await _service.GetAllPendingOrders();
@@ -94,12 +94,12 @@ public class OrderController : Controller
     }
     
     [HttpPost]
-    [Authorize(Policy = "Courier")]
+    [Authorize(Policy = "Seller")]
     public async Task<IActionResult> AcceptDeliveryOfOrder(int orderId)
     {
-        int courierId = int.Parse(HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Actor).Value);
+        int sellerId = int.Parse(HttpContext.User.Claims.First(e => e.Type == ClaimTypes.Actor).Value);
 
-        var orders = await _service.AcceptDeliveryOfOrder(orderId, courierId);
+        var orders = await _service.AcceptDeliveryOfOrder(orderId, sellerId);
 
         return Json(orders);
     }

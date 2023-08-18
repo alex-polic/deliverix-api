@@ -36,9 +36,9 @@ public class UserController : Controller
     
     [HttpGet]
     [Authorize(Policy = "Administrator")]
-    public async Task<IActionResult> GetAllCouriers()
+    public async Task<IActionResult> GetAllSellers()
     {
-        var users = await _service.GetAllCouriers();
+        var users = await _service.GetAllSellers();
 
         return Json(users);
     }
@@ -56,7 +56,7 @@ public class UserController : Controller
     [Authorize(Policy = "Administrator")]
     public async Task<IActionResult> ApproveVerification([FromBody] VerificationDTO request)
     {
-        var userUpdated = await _service.ApproveVerification(request.CourierId);
+        var userUpdated = await _service.ApproveVerification(request.SellerId);
 
         return Json(userUpdated);
     }
@@ -65,7 +65,7 @@ public class UserController : Controller
     [Authorize(Policy = "Administrator")]
     public async Task<IActionResult> RejectVerification([FromBody] VerificationDTO request)
     {
-        var userUpdated = await _service.RejectVerification(request.CourierId);
+        var userUpdated = await _service.RejectVerification(request.SellerId);
 
         return Json(userUpdated);
     }

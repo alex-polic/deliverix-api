@@ -7,7 +7,7 @@ public class User
     public User()
     {
         BuyerOrders = new HashSet<Order>();
-        CourierOrders = new HashSet<Order>();
+        SellerOrders = new HashSet<Order>();
     }
 
     public int Id { get; set; }
@@ -26,5 +26,5 @@ public class User
     public DateTime UpdatedAt { get; set; }
     
     public ICollection<Order> BuyerOrders { get; set; }
-    public ICollection<Order> CourierOrders { get; set; }
+    public ICollection<Order> SellerOrders { get; set; }
 }

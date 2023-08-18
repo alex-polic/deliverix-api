@@ -58,11 +58,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Any",
-        policy => policy.RequireRole("Buyer", "Courier", "Administrator"));
+        policy => policy.RequireRole("Buyer", "Seller", "Administrator"));
     options.AddPolicy("Buyer",
         policy => policy.RequireRole("Buyer"));
-    options.AddPolicy("Courier",
-        policy => policy.RequireRole("Courier"));
+    options.AddPolicy("Seller",
+        policy => policy.RequireRole("Seller"));
     options.AddPolicy("Administrator",
         policy => policy.RequireRole("Administrator"));
 });

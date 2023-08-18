@@ -9,9 +9,9 @@ public class MapperProfile : Profile
 {
     public MapperProfile()
     {
-        CreateMap<Order, OrderWithOrderedProductsAndBuyerAndCourierDTO>().ReverseMap();
+        CreateMap<Order, OrderWithOrderedProductsAndBuyerAndSellerDTO>().ReverseMap();
         CreateMap<Order, OrderDTO>().ReverseMap();
-        CreateMap<OrderDTO, OrderWithOrderedProductsAndBuyerAndCourierDTO>().ReverseMap();
+        CreateMap<OrderDTO, OrderWithOrderedProductsAndBuyerAndSellerDTO>().ReverseMap();
         CreateMap<User, UserDTO>().ReverseMap();
         CreateMap<Product, ProductDTO>().ReverseMap();
         CreateMap<OrderedProduct, OrderedProductDTO>().ReverseMap();

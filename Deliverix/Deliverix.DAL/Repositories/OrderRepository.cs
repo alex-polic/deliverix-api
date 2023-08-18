@@ -33,7 +33,7 @@ public class OrderRepository : IOrderRepository
         return await _collection
             .Include(e => e.OrderedProducts)
             .Include(e => e.Buyer)
-            .Include(e => e.Courier)
+            .Include(e => e.Seller)
             .AsNoTracking()
             .FirstOrDefaultAsync(e => e.Id == id);
     }
@@ -47,12 +47,12 @@ public class OrderRepository : IOrderRepository
             );
     }
 
-    public async Task<Order?> GetCurrentForCourierWithOrderedProducts(int courierId)
+    public async Task<Order?> GetCurrentForSellerWithOrderedProducts(int sellerId)
     {
         return await _collection.AsNoTracking()
                 .FirstOrDefaultAsync(
                     e => 
-                        e.CourierId == courierId && e.DeliveryStatus != DeliveryStatus.Delivered
+                        e.SellerId == sellerId && e.DeliveryStatus != DeliveryStatus.Delivered
                 );
     }
 
@@ -66,7 +66,7 @@ public class OrderRepository : IOrderRepository
         return await _collection
             .Include(e => e.OrderedProducts)
             .Include(e => e.Buyer)
-            .Include(e => e.Courier)
+            .Include(e => e.Seller)
             .AsNoTracking()
             .ToListAsync();
     }
@@ -76,20 +76,20 @@ public class OrderRepository : IOrderRepository
         return await _collection
             .Include(e => e.OrderedProducts)
             .Include(e => e.Buyer)
-            .Include(e => e.Courier)
+            .Include(e => e.Seller)
             .AsNoTracking()
             .Where(e => e.BuyerId == buyerId && e.DeliveryStatus == DeliveryStatus.Delivered)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Order?>> GetAllPastForCourier(int courierId)
+    public async Task<IEnumerable<Order?>> GetAllPastForSeller(int sellerId)
     {
         return await _collection
             .Include(e => e.OrderedProducts)
             .Include(e => e.Buyer)
-            .Include(e => e.Courier)
+            .Include(e => e.Seller)
             .AsNoTracking()
-            .Where(e => e.CourierId == courierId && e.DeliveryStatus == DeliveryStatus.Delivered)
+            .Where(e => e.SellerId == sellerId && e.DeliveryStatus == DeliveryStatus.Delivered)
             .ToListAsync();    
     }
     
@@ -98,9 +98,9 @@ public class OrderRepository : IOrderRepository
         return await _collection
             .Include(e => e.OrderedProducts)
             .Include(e => e.Buyer)
-            .Include(e => e.Courier)
+            .Include(e => e.Seller)
             .AsNoTracking()
-            .Where(e => e.CourierId == null && e.DeliveryStatus == DeliveryStatus.Pending)
+            .Where(e => e.SellerId == null && e.DeliveryStatus == DeliveryStatus.Pending)
             .ToListAsync();    
     }
 

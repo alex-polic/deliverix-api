@@ -7,7 +7,7 @@ public class OrderDTO
     public int Id { get; set; }
 
     public int BuyerId { get; set; }
-    public int? CourierId { get; set; }
+    public int? SellerId { get; set; }
     public string DeliveryAddress { get; set; }
     public string Comment { get; set; }
     public decimal FullPrice { get; set; }
