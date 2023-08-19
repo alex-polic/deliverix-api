@@ -1,0 +1,11 @@
+INSERT INTO Sellers.dbo.OrderedProduct (   OrderId, ProductId,Amount, CreatedAt, UpdatedAt) VALUES (1, 1, 1.00, N'2022-07-13 18:55:09.100', N'2022-07-13 18:55:09.100');
+INSERT INTO Sellers.dbo.OrderedProduct (   OrderId, ProductId,Amount, CreatedAt, UpdatedAt) VALUES (2, 1, 1.00, N'2022-07-13 20:32:00.603', N'2022-07-13 20:32:00.603');
+INSERT INTO Sellers.dbo.OrderedProduct (   OrderId, ProductId,Amount, CreatedAt, UpdatedAt) VALUES (3, 1, 1.00, N'2022-07-13 20:37:09.703', N'2022-07-13 20:37:09.703');
+INSERT INTO Sellers.dbo.OrderedProduct (   OrderId, ProductId,Amount, CreatedAt, UpdatedAt) VALUES (4, 1, 1.00, N'2022-07-13 20:39:51.220', N'2022-07-13 20:39:51.220');
+INSERT INTO Sellers.dbo.OrderedProduct (   OrderId, ProductId,Amount, CreatedAt, UpdatedAt) VALUES (5, 1, 1.00, N'2022-07-13 20:41:50.287', N'2022-07-13 20:41:50.287');
+INSERT INTO Sellers.dbo.OrderedProduct (   OrderId, ProductId,Amount, CreatedAt, UpdatedAt) VALUES (6, 1, 1.00, N'2022-07-13 20:49:40.553', N'2022-07-13 20:49:40.553');
+INSERT INTO Sellers.dbo.OrderedProduct (   OrderId, ProductId,Amount, CreatedAt, UpdatedAt) VALUES (7, 1, 1.00, N'2022-07-13 20:50:50.137', N'2022-07-13 20:50:50.137');
+INSERT INTO Sellers.dbo.OrderedProduct (   OrderId, ProductId,Amount, CreatedAt, UpdatedAt) VALUES (9, 1, 3.00, N'2022-07-14 21:30:05.247', N'2022-07-14 21:30:05.247');
+INSERT INTO Sellers.dbo.OrderedProduct (   OrderId, ProductId,Amount, CreatedAt, UpdatedAt) VALUES (10, 1, 2.00, N'2022-07-14 21:35:11.467', N'2022-07-14 21:35:11.467');
+INSERT INTO Sellers.dbo.OrderedProduct (   OrderId, ProductId,Amount, CreatedAt, UpdatedAt) VALUES ( 10, 2, 1.00, N'2022-07-14 21:35:11.477', N'2022-07-14 21:35:11.477');
+INSERT INTO Sellers.dbo.OrderedProduct (   OrderId, ProductId,Amount, CreatedAt, UpdatedAt) VALUES ( 11, 4, 2.00, N'2022-07-15 17:39:42.767', N'2022-07-15 17:39:42.767');
