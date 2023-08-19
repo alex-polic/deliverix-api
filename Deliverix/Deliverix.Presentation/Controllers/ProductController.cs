@@ -34,7 +34,7 @@ public class ProductController : Controller
     }
     
     [HttpPost]
-    [Authorize(Policy = "Administrator")]
+    [Authorize(Policy = "Any")]
     public async Task<IActionResult> Create([FromBody] ProductDTO product)
     {
         var productCreated = await _service.Create(product);
@@ -43,7 +43,7 @@ public class ProductController : Controller
     }
     
     [HttpPatch]
-    [Authorize(Policy = "Administrator")]
+    [Authorize(Policy = "Any")]
     public async Task<IActionResult> Update([FromBody] ProductDTO product)
     {
         var productUpdated = await _service.Update(product);
@@ -52,7 +52,7 @@ public class ProductController : Controller
     }
     
     [HttpDelete]
-    [Authorize(Policy = "Administrator")]
+    [Authorize(Policy = "Any")]
     public async Task<IActionResult> Delete(int id)
     {
         var product = await _service.Delete(id);
